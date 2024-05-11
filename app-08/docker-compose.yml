@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8000:80"
+        volumes:
+            - .:/var/www/app
+        depends_on:
+            - mysql
+            - postgresql
+            - mongo
+            - redis
+
+    mysql:
+        image: mysql:latest
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: secret
+        ports:
+            - "3306:3306"
+
+    postgresql:
+        image: postgres:latest
+        restart: always
+        environment:
+            POSTGRES_USER: laravel
+            POSTGRES_PASSWORD: secret
+            POSTGRES_DB: laravel
+        ports:
+            - "5432:5432"
+
+    mongo:
+        image: mongo:latest
+        restart: always
+        ports:
+            - "27017:27017"
+
+    redis:
+        image: redis:latest
+        restart: always
+        ports:
+            - "6379:6379"
